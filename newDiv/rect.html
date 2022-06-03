@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="blog about software writing and using">
+  <meta name="keywords" content="Go">
+  <meta name="author" content="prr">
+  <meta name="date" content="1\3\2021">
+  <meta  name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Here is the Title</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  list-style: none;
+  text-decoration:none;
+}
+.main_div {
+	border: red solid 1px;
+	min-height: 200px;
+}
+.nav_div {
+	border: purple solid 1px;
+	min-height: 50px;
+	cursor: n-resize;
+	background-color: rgb(247, 194, 153);
+}
+</style>
+<script>
+window.onload = function() {
+	mdiv = document.getElementById("mdivid");
+	navdiv = document.getElementById("navid");
+
+	let navht = navdiv.offsetHeight;
+	console.log('nav height: ' + navht);
+	let mmEnable = false;
+	let mm = false;
+
+	mdiv.onmm = function(e) {
+//		console.log('yoffset: ' + e.offsetY);
+		navht = e.offsetY;
+		navdiv.style.height = navht + "px";
+//   	mdiv.style.borderColor = 'green';
+	}
+
+	mdiv.onmu = function(e) {
+		console.log('mu');
+		mdiv.style.minHeight = e.offsetY;
+   		mdiv.style.borderColor = 'blue';
+	}
+	navdiv.onmd = function(e) {
+		console.log('md');
+   		mdiv.style.borderBottomColor = 'black';
+		mdiv.style.borderBottomStyle = 'dashed';
+	}
+
+	function waitmdivclick() {
+		mdiv.addEventListener('click', mdiv.onclick);
+		mdiv.addEventListener('mousemove', mdiv.onmm);
+		mmEnable = true;
+	}
+
+	mdiv.onclick = function(e) {		
+		console.log('m1clic: ' + mmEnable);
+		if (mmEnable) {
+			console.log('m2click ' + navht);
+			navdiv.style.height = navht + "px";
+   			navdiv.style.borderColor = 'orange';
+			navdiv.style.backgroundColor = '';
+			mmEnable = false;
+			mdiv.removeEventListener('mousemove', mdiv.onmm)
+			mm = false;
+		}
+	}
+
+	navdiv.onclick = function(e) {
+		console.log('nclick: ' + mmEnable);
+//		console.log(e);
+		if (!mmEnable) {
+			navht = navdiv.offsetHeight;
+   			navdiv.style.borderColor = 'green';
+			navdiv.style.backgroundColor = "rgb(202, 227,193)";
+//		mdiv.addEventListener('click', mdiv.onclick);
+			navdiv.removeEventListener('click', navdiv.onclick)
+			myTimeout = setTimeout(waitmdivclick, 200);		
+			mm = true;
+		}
+	}
+
+
+	navdiv.addEventListener('click', navdiv.onclick);
+//	mdiv.addEventListener('mousedown', mdiv.onmd);
+//	mdiv.addEventListener('mouseup', mdiv.onmu);
+	
+}
+</script>
+</head>
+<body>
+  <div class="main_div" id="mdivid">
+  <div class="nav_div" id="navid">
+  <h1>Hello Index</h1>
+  </div>
+  </div>
+</body>
+</html>
