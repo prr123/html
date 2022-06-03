@@ -1,0 +1,270 @@
+<!DOCTYPE html> 
+<html>
+<head> 
+	<meta charset = "utf-8" /> 
+   <title>Azul Software</title> 
+    <style>
+	body { 
+		box-sizing: border-box;
+		margin: 0px;
+		background: transparent;
+        }   
+	header {
+		box-sizing: border-box;			
+		height: 100px;	
+		width: 100%;
+		background-color: #c6ecff; 
+		}
+	footer {
+		clear: left;
+		height: 120px;
+		padding: 20px 0;
+        background-color: #8015a2; 
+        color: #fff;            
+        text-align:center; 
+        font-size:30px; 
+        font-weight:bold; 
+        }
+	#main_left {
+		float: left;
+		background-color: #ebe7e6;
+		width: 200px;
+		height: calc(100vh - 260px);
+	}
+	#main_right {
+		float: left;
+		background-color: #cbe7e6;		
+		width: calc(100% - 200px);
+		height: 200px;
+	}
+	#main_left:hover {
+		opacity: 0.0;
+	}
+	#tsttab {
+		border-spacing: 0px;
+		border-collapse: collapse;
+	}
+	#tab2 {
+		position: relative;
+		top: 10px;
+		border-spacing: 0px;
+		border-collapse: collapse;
+	}
+	th, td {
+  		border: 1px solid black;
+		padding: 2px;
+	}
+	#but {
+		position: relative;
+		top: 10px;
+		left: 200px;
+	}
+	</style>
+	<script>
+	var tabobj = {lcol: -1, lrow: -1 , maxcol: -1, maxrow: -1};
+
+	tabobj.init_dtable = function() {
+		let dat_tab = [
+ 			[{val: 'John', nval: 'John'}, {val: 'Crow', nval: 'Crow'}],
+ 			[{val: 'Jim',nval: 'Jim'},{val: 'Beam', nval:'Beam'}],
+			[{val: 'Peter', nval: 'Peter'}, {val: 'Rabbit', nval: 'Rabbit'}]
+		];
+	return dat_tab;
+	}
+
+	tabobj.gen_table = function(dataArr) {
+
+		num_rows = dataArr.length;
+		tabobj.maxrow = num_rows;
+		if (num_rows < 1) {
+			console.log('error dataArr insufficient rows');
+			return;
+		}
+		num_cols = dataArr[0].length;
+		tabobj.maxcol = num_cols;
+		if (num_cols < 1) {
+			console.log('error dataArr insufficient cols');
+			return;
+		}
+		tabobj.cellupd = false;
+
+		console.log('rows: ' + num_rows + ' cols: ' + num_cols);
+
+		let el = document.getElementById("main_right");
+		let table = document.createElement('table');
+		table.id = "tab2";
+
+		let theader = table.createTHead();
+		let hrow = theader.insertRow();
+		let hcell = hrow.insertCell();
+		hcell.textContent = 'id';
+		hcell = hrow.insertCell();
+		hcell.textContent = 'First';
+		hcell = hrow.insertCell();
+		hcell.textContent = 'Name';
+			
+		let tbody = table.createTBody();	
+		let irow = 0;
+		for (let row of dataArr) {
+			let trow = tbody.insertRow();
+			let newCell = trow.insertCell();
+			newCell.textContent = irow;
+			irow++;
+			for (let cell of row) {
+				let newCell = trow.insertCell();
+				newCell.textContent = cell.val;
+				newCell.contentEditable = 'true';
+			}
+		}
+		el.appendChild(table);
+	}
+
+	tabobj.inpfunc = function(e) {
+		let cel = e.target;
+		let icol = cel.cellIndex;
+		let irow = cel.parentNode.rowIndex; 
+		tabobj.inpcol = icol;
+		tabobj.inprow = irow;
+		tabobj.cellupd = true;
+		setTimeout(tabobj.tabupd, 200);
+		
+		console.log('input' + cel + ' icol: ' + icol + ' irow: ' + irow );
+	}
+
+	tabobj.tabupd = function() {
+		tabobj.dtab[tabobj.inprow-1][tabobj.inpcol-1].nval = tabobj.tab.rows[tabobj.inprow].cells[tabobj.inpcol].textContent;
+		tabobj.cellupd = false;
+		console.log('dtab upd icol: ' + tabobj.inpcol + ' irow: ' + tabobj.inprow + ' content new: ' + tabobj.dtab[tabobj.inprow-1][tabobj.inpcol -1].nval);
+	}
+
+	tabobj.telfunc2 = function(e) {
+		let cel = e.target;
+		let icol = cel.cellIndex;
+		let irow = cel.parentNode.rowIndex; 
+		console.log('click' + cel + ' icol: ' + icol + ' irow: ' + irow );
+	}
+
+	tabobj.focout = function(e) {
+		let cel = e.target;
+		let icol = cel.cellIndex;
+		let irow = cel.parentNode.rowIndex;
+		if (tabobj.cellupd) {
+			tabobj.dtab[irow-1][icol-1].nval = cel.textContent;
+			tabobj.cellupd = false;
+			console.log('update: ' + cel.textContent + ' |icol: ' + icol + ' irow: ' + irow );
+		}
+	}
+
+	tabobj.keyd = function(e) {
+		let key = e.key;
+		let cel = e.target;
+		let ctrlkey = e.ctrlKey;
+		let icol = cel.cellIndex;
+		let irow = cel.parentNode.rowIndex;
+//		console.log('key down1: ' + key + ' control: ' + ctrlkey + ' row: ' + irow + ' col: ' + icol);
+
+		switch (key) {
+    	case "ArrowLeft":
+        	if (ctrlkey) {				
+				if (icol>1) tabobj.tab.rows[irow].cells[icol-1].focus();
+			}
+        break;
+    	case "ArrowRight":
+        // Right pressed
+        	if (ctrlkey) {
+				if (icol < tabobj.maxcol) tabobj.tab.rows[irow].cells[icol+1].focus();
+			}
+
+        	break;
+    	case "ArrowUp":
+        // Up pressed
+        	if (ctrlkey) {
+				if (irow > 1) tabobj.tab.rows[irow-1].cells[icol].focus();
+			}
+
+        	break;
+    	case "ArrowDown":
+        // Down pressed
+        	if (ctrlkey) {
+				if (irow < tabobj.maxrow) tabobj.tab.rows[irow+1].cells[icol].focus();
+			}
+
+        	break;
+		default:
+			return;
+		}
+//		console.log('key up2: ' + key + ' control: ' + ctrlkey );
+	}
+
+
+	tabobj.keyup = function(e) {
+		let key = e.key;
+	}
+
+
+
+	tabobj.butfunc = function(){
+		let focus_el = tab2.rows[1].cells[1];
+		focus_el.focus();
+		console.log('button click');
+	}
+
+	
+
+	window.onload = function(){
+		tabobj.dtab = tabobj.init_dtable();
+		tabobj.gen_table(tabobj.dtab);
+
+		tabobj.tab = document.getElementById("tab2")
+		tab2 = tabobj.tab
+//		console.log('lcol: ' + tab2.lcol + ' lrow: ' + tab2.lrow); 		
+//		console.log(' rows: ' + tabobj.tab.rows.length); 		
+		let jrow = tab2.rows[0];
+//		console.log(' cols: ' + jrow.cells.length);
+		tab2.addEventListener('input',tabobj.inpfunc);
+		tab2.addEventListener('click',tabobj.telfunc2);
+		tab2.addEventListener('focusout',tabobj.focout);
+
+		tab2.addEventListener('keydown',tabobj.keyd);
+//		tab2.addEventListener('keydown',tabobj.keyd, {once: true});
+
+		tab2.addEventListener('keyup',tabobj.keyup);
+		but.addEventListener('click',tabobj.butfunc);
+		console.log('lcol: ' + tabobj.lcol + ' lrow: ' + tabobj.lrow); 		
+	}
+
+	</script>
+</head>
+<body>
+    <!-- Header Section -->
+    <header> 
+        <span>Header</span> 
+    </header>
+	<div id="main_left">
+		<span>This is the begining of something great</span>
+	</div>
+	<div id="main_right">
+		<span>This is the end of something great</span>
+		<table id="tsttab">
+  			<tr>
+				<th>id</th>
+    			<th>Firstname</th>
+    			<th>Lastname</th>
+  			</tr>
+  			<tr>
+				<td>1</td>
+    			<td contenteditable='true'>Jill</td>
+    			<td contenteditable='true'>Smith</td>
+  			</tr>
+  			<tr>
+				<td>2</td>
+				<td contenteditable='true'>Eve</td>
+				<td contenteditable='true'>Jackson</td>
+  			</tr>
+		</table>
+	<button id="but">Click Me!</button>
+	</div>
+
+    <footer>Footer Section</footer> 
+</body> 
+</html>  	
