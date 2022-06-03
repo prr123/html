@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	
+<head>
+	<title>
+		Calculate the text width
+		with JavaScript
+	</title>
+</head>
+
+<body>
+	<h1 style="color: green">
+		GeeksforGeeks
+	</h1>
+	
+	<b>
+		Calculate text width
+		with JavaScript
+	</b>
+	
+	<p>
+		Text to calculate width is
+		"Hello World"
+	</p>
+	<p>Font size of the text is 16px</p>
+	
+	<p>
+		Width of the text is:
+		<span class="output"></span>
+	</p>
+	
+	<button onclick="getTextWidth()">
+		Calculate text width
+	</button>
+	
+	<script type="text/javascript">
+		function getTextWidth() {
+
+			text = document.createElement("span");
+			document.body.appendChild(text);
+
+			text.style.font = "times new roman";
+			text.style.fontSize = 16 + "px";
+			text.style.height = 'auto';
+			text.style.width = 'auto';
+			text.style.position = 'absolute';
+			text.style.whiteSpace = 'no-wrap';
+			text.innerHTML = 'Hello World';
+
+			width = Math.ceil(text.clientWidth);
+			formattedWidth = width + "px";
+
+			document.querySelector('.output').textContent
+					= formattedWidth;
+			document.body.removeChild(text);
+		}
+	</script>
+</body>
+
+</html>	
+
