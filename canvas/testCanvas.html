@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+	.main {
+		border: red solid 1px;
+		min-width: 1400px;
+		min-height: 1100px;
+		margin: 5px;
+	}
+	.main.left {
+		border: blue solid 1px;
+		min-width: 500px;
+		min-height: 1000px;
+		margin: 10px;
+		float: left;
+	}
+	.main.right {
+		border: green solid 1px;
+		min-width: 700px;
+		min-height: 1000px;
+		margin: 10px;
+		float: left;
+	}
+	.header {
+		border: green solid 1px;
+		height: 100px;
+		margin: 5px;
+	}
+	#myCanvas {
+		border: purple solid 1px;
+		width: 600px;
+		height: 800px;
+		margin: 10px;
+	}
+    </style>
+  </head> 
+  <body>
+	<div class="header">
+	</div>
+	<div class="main">
+		<div class="main left">
+		</div>
+		<div class="main right">
+    		<canvas id="myCanvas"></canvas>
+		</div>
+	</div>
+  </body>
+    <script>
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+
+      // do cool things with the context
+      context.font = '20pt Calibri';
+      context.fillStyle = 'blue';
+      context.fillText('Hello World!', 150, 100);
+    </script>
+
+</html>
+
